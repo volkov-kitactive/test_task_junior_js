@@ -19,7 +19,7 @@
 
 ### Backend
 
-Домен - `https://test.kitactive.ru:8089`
+Домен - `https://job.kitactive.ru`
 
 Роуты:
 

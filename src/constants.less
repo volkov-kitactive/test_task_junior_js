@@ -1,0 +1,62 @@
+//  переменные
+@maincolor: #1b70ca;
+@mainBlack: #333;
+
+//примеси кнопок
+.buttons(@_width: 156px) {
+  border-radius: 5px;
+  width: @_width;
+  height: 38px;
+  font-size: 20px;
+  font-weight: lighter;
+
+  &_disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+};
+
+
+.form {
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column wrap;
+  width: 50%;
+  margin: 0 auto 20px;
+
+  &__group {
+    display: flex;
+    flex-flow: column wrap;
+    gap: 30px;
+    margin: 0 0;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    display: block;
+    font-size: 18px;
+    line-height: 1.21;
+    // padding-bottom: 14px;
+    padding: 14px;
+    width: 100%;
+
+    /* &:focus-visible {
+      border: none;
+    } */
+  }
+
+  &__span {
+    color: red;
+
+    margin: 10px 0 0;
+    height: 60px;
+  }
+
+  &__button {
+    background-color: @maincolor;
+    .buttons(100%);
+
+  }
+}

@@ -1,17 +1,48 @@
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormAndValidation } from "../../components/hooks/useFormAndValidation";
+
+import * as api from '../../api';
 
 import "./Auth.less";
 
-const Auth = () => {
+const Auth = ({ handleLogin }) => {
   const { isValid, values, handleChange } = useFormAndValidation();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  // На этом компоненте решил попробовать redux
+  // решил в стор токен сохранять
+  const addTokentoStoreRedux = (token) => {
+    dispatch({type: 'SET_TOKEN', payload: token})
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // handleLogin({ email: values.email, password: values.password });
+    api.login({email: values.email, password: values.password})
+      .then((res) => {
+        if (res.data.token) {
+          // сохраняем в стор токен
+          addTokentoStoreRedux(res.data.token)
+
+          // в локалку тоже сохраняю
+          localStorage.setItem("token", res.data.token);
+          handleLogin({email: values.email}) //так как токен пришёл значит, авторизация прошла успешно, можно поставить значение емейла из инпута
+          navigate('/me')
+        }
+      })
+      .catch((err) => console.log(err))
+  };
+
+
 
   return (
     <main className="main">
       <div className="auth">
         <h2 className="auth__title">Вход</h2>
-        <form className="form" noValidate action="#">
+        <form className="form" noValidate action="#" onSubmit={handleSubmit}>
           <div className="form__group">
             <input
               type="email"

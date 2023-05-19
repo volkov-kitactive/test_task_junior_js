@@ -25,11 +25,17 @@ function App() {
   });
   const location = useLocation();
   const currentPath = location.pathname;
-
   const navigate = useNavigate();
 
+
   const handleRegistration = (obj) => {
-    api.register(obj).then((res) => console.log(res));
+    api.register(obj)
+      .then((res) => {
+        if (res.data.status === 'ok') {
+          navigate('/login')
+        }
+      })
+      .catch((err) => alert('Регистрация провалилась'))
   };
 
   const handleLogin = (res) => {

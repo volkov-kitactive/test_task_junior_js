@@ -20,7 +20,10 @@ import {
   decrementFileCount,
   incrementFileCount,
   setFiles,
+  addItem,
 } from "../../store/actions";
+
+import './Cabinet.less'
 
 const Cabinet = ({ user, handle }) => {
   const dispatch = useDispatch();
@@ -32,7 +35,7 @@ const Cabinet = ({ user, handle }) => {
   /* конфиг uppy */
   const uppy = new Uppy({
     restrictions: {
-      maxNumberOfFiles: 5,
+      maxNumberOfFiles: 20,
       maxTotalFileSize: 1048576,
       allowedFileTypes: [
         "image/*",
@@ -58,23 +61,26 @@ const Cabinet = ({ user, handle }) => {
     />
   ));
 
-  /* Отправляем файл на сервер, при помощи загрузчика xhr от uppy */
-  uppy.use(XHRUpload, {
-    endpoint: "https://job.kitactive.ru/api/media/upload",
-
-    formData: true,
-    fieldName: "files[]",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  /**  Отправляем файл на сервер, при помощи загрузчика xhr от uppy */
+  uppy
+    .use(XHRUpload, {
+      endpoint: "https://job.kitactive.ru/api/media/upload",
+      formData: true,
+      fieldName: "files[]",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .on("upload-success", (file, response) => {
+      dispatch(incrementFileCount(1));
+      dispatch(addItem(file.data));
+    });
 
   useEffect(() => {
     api
       .getFiles(token)
       .then((res) => {
         dispatch(setFiles(res.data.files));
-        console.log(res.data.files);
         dispatch(incrementFileCount(res.data.files.length));
       })
       .catch((err) => console.err(err));
@@ -86,8 +92,10 @@ const Cabinet = ({ user, handle }) => {
         <h2 className="main__title">Личный кабинет</h2>
         <p className="main__subtitle">Здравствуйте {user?.email}!</p>
         <p className="main__subtitle">Кол-во файлов: {filesCount}</p>
-        <Dashboard uppy={uppy} />
-        <div className="cards">{filesElements}</div>
+        <div className="main__info">
+          <div className="cards">{filesElements}</div>
+          <Dashboard uppy={uppy} />
+        </div>
       </div>
     </main>
   );

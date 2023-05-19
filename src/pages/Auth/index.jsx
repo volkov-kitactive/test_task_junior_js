@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormAndValidation } from "../../components/hooks/useFormAndValidation";
+import {saveToken} from '../../store/actions'
 
 import * as api from '../../api';
 
@@ -11,12 +12,6 @@ const Auth = ({ handleLogin }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // На этом компоненте решил попробовать redux
-  // решил в стор токен сохранять
-  const addTokentoStoreRedux = (token) => {
-    dispatch({type: 'SET_TOKEN', payload: token})
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -25,7 +20,7 @@ const Auth = ({ handleLogin }) => {
       .then((res) => {
         if (res.data.token) {
           // сохраняем в стор токен
-          addTokentoStoreRedux(res.data.token)
+          dispatch(saveToken(res.data.token))
 
           // в локалку тоже сохраняю
           localStorage.setItem("token", res.data.token);
@@ -35,9 +30,6 @@ const Auth = ({ handleLogin }) => {
       })
       .catch((err) => console.log(err))
   };
-
-  
-
 
   return (
     <main className="main">

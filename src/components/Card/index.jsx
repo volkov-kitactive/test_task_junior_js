@@ -32,11 +32,13 @@ const Card = ({ name, id, mimeType, fileName }) => {
   };
 
   const handleDelete = (e) => {
-    e.stopPropagation() // запрещаем всплытие(забыл просто название метода на собесе, всё норм я его знаю)
+    e.stopPropagation() // запрещаем всплытие
     const jwt = localStorage.getItem('token')
     api.deleteOneFile(jwt, id)
       .then(() => {
         dispatch(deleteItem(id));
+        console.log(files.length);
+        dispatch(decrementFileCount(1))
       })
   }
 

@@ -21,7 +21,18 @@ export const decrementFileCount = (count) => {
 
 export const deleteItem = (id) => {
   return {
-    type: 'DELETE_ITEM',
-    payload: id
-  }
+    type: "DELETE_ITEM",
+    payload: id,
+  };
+};
+
+export const addItem = (file) => {
+  return {
+    type: "ADD_ITEMS",
+    payload: file,
+  };
+};
+
+export const saveToken = (token) => {
+  return { type: "SET_TOKEN", payload: token };
 };

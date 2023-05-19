@@ -1,0 +1,26 @@
+.cards {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+}
+
+.card {
+  width: 200px;
+  height: 200px;
+  border: 1px gray solid;
+  border-radius: 3px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  &__name {
+    text-overflow: ellipsis;
+  }
+
+
+  &__image {
+    width: 100px;
+    height: 100px;
+  }
+}

@@ -1,7 +1,7 @@
 import { Provider } from "react-redux";
-import store from '../../store'
+import store from "../../store";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Header from "../Header";
 import Footer from "../Footer";
@@ -49,15 +49,12 @@ function App() {
       .catch((err) => console.error(err));
   };
 
-
-
   return (
     <Provider store={store}>
       <div className="page__container">
         <Header currentPath={currentPath} logOut={logOut} />
 
         <Routes>
-          <Route path="/" element={<Main />} />
           <Route
             path="/me"
             element={
@@ -68,6 +65,7 @@ function App() {
               />
             }
           />
+          <Route path="/" element={<Main />} />
           <Route path="/login" element={<Auth handleLogin={handleLogin} />} />
           <Route
             path="/register"

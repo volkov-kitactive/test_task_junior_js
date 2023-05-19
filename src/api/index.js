@@ -45,6 +45,7 @@ export const getOneFile = (token, id) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    responseType: 'blob'
   });
 }
 

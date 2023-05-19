@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from "redux";
-import { filesReducer, tokenReducer, fileCountReducer } from "./reducers";
+import { filesReducer, tokenReducer, fileCountReducer, } from "./reducers";
 
 const initialState = {
   token: null,

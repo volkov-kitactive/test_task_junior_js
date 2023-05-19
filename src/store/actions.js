@@ -18,3 +18,10 @@ export const decrementFileCount = (count) => {
     payload: count,
   };
 };
+
+export const deleteItem = (id) => {
+  return {
+    type: 'DELETE_ITEM',
+    payload: id
+  }
+};

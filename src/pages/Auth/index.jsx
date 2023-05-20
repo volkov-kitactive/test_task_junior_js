@@ -1,34 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { useFormAndValidation } from "../../components/hooks/useFormAndValidation";
-import {saveToken} from '../../store/actions'
-
-import * as api from '../../api';
 
 import "./Auth.less";
 
-const Auth = ({ handleLogin }) => {
-  const { isValid, values, handleChange } = useFormAndValidation();
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+const Auth = ({ login }) => {
+  // кастомный хук обработки формы и её валидации
+  const { isValid, values, handleChange, errors } = useFormAndValidation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // handleLogin({ email: values.email, password: values.password });
-    api.login({email: values.email, password: values.password})
-      .then((res) => {
-        if (res.data.token) {
-          // сохраняем в стор токен
-          dispatch(saveToken(res.data.token))
-
-          // в локалку тоже сохраняю
-          localStorage.setItem("token", res.data.token);
-          handleLogin({email: values.email}) //так как токен пришёл значит, авторизация прошла успешно, можно поставить значение емейла из инпута
-          navigate('/me')
-        }
-      })
-      .catch((err) => console.log(err))
+    // колбэком возвращаем значения обратно в App, так как логика входа у нас там
+    login({ email: values.email, password: values.password });
   };
 
   return (
@@ -47,6 +30,8 @@ const Auth = ({ handleLogin }) => {
               value={values.email || ""}
               onChange={handleChange}
             />
+            <span className="form__span">{errors.email}</span>
+
             <input
               type="password"
               name="password"
@@ -58,6 +43,8 @@ const Auth = ({ handleLogin }) => {
               autoComplete="off"
               onChange={handleChange}
             />
+            <span className="form__span">{errors.password}</span>
+
           </div>
 
           <span className="form__span"></span>

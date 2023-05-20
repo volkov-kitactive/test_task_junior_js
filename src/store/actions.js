@@ -1,3 +1,5 @@
+/** экшены  */
+
 export const setFiles = (files) => {
   return {
     type: "SET_FILES",
@@ -28,7 +30,7 @@ export const deleteItem = (id) => {
 
 export const addItem = (file) => {
   return {
-    type: "ADD_ITEMS",
+    type: "ADD_ITEM",
     payload: file,
   };
 };

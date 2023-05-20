@@ -4,18 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import "./Card.less";
 import { FaFile, FaFileImage } from "react-icons/fa";
 
-import {
-  decrementFileCount,
-  incrementFileCount,
-  setFiles,
-  deleteItem
-} from "../../store/actions";
+import { decrementFileCount, deleteItem } from "../../store/actions";
 
 const Card = ({ name, id, mimeType, fileName }) => {
   const files = useSelector((state) => state.files);
   const dispatch = useDispatch();
-
-
 
   /* Функция скачивает файл, на комп */
   const handleDownload = (e) => {
@@ -32,15 +25,14 @@ const Card = ({ name, id, mimeType, fileName }) => {
   };
 
   const handleDelete = (e) => {
-    e.stopPropagation() // запрещаем всплытие
-    const jwt = localStorage.getItem('token')
-    api.deleteOneFile(jwt, id)
-      .then(() => {
-        dispatch(deleteItem(id));
-        console.log(files.length);
-        dispatch(decrementFileCount(1))
-      })
-  }
+    e.stopPropagation(); // запрещаем всплытие
+    const jwt = localStorage.getItem("token");
+    api.deleteOneFile(jwt, id).then(() => {
+      dispatch(deleteItem(id));
+      console.log(files.length);
+      dispatch(decrementFileCount(1));
+    });
+  };
 
   return (
     <article className="card" onClick={handleDownload}>

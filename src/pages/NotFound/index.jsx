@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import './NotFound.less'
+import "./NotFound.less";
 
 /** На этот компонет будет выкидывать если путь не найден
  * ? replace - при переходе заменяет в истории путь

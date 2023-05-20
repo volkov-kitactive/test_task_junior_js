@@ -31,14 +31,15 @@ export const getFiles = (token) => {
   });
 }
 
-export const addFiles = (obj, token) => {
-  return axios.post(`${BASE_URL}/upload`, {
-    obj, // !скорее всего неправильно
+// ! Убран, так как загрузчик XHR от UPPY, лучше делает свою работу
+/* export const addFiles = (obj, token) => {
+  return axios.post(`${BASE_URL}/media/upload`, {
+    obj,
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-}
+} */
 
 export const getOneFile = (token, id) => {
   return axios.get(`${BASE_URL}/media/${id}`, {

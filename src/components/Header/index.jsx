@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import styles from "./Header.module.less";
 import headerLogo from "../../img/header__logo.svg";
 
+/** Компонет шапки сайта, на эндпоинтах выглядит по разному
+ * ? Референс сайта kitActive))
+ */
 const Header = ({ currentPath, logOut }) => {
-
-
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
@@ -33,7 +34,7 @@ const Header = ({ currentPath, logOut }) => {
                 transform="translate(-782 -184)"
               ></path>
             </svg>
-            <a href="tel:+73512209606">+7 351 220 96-06</a>
+            <a href="tel:+79043042030">+7 904 304 20-30</a>
           </div>
           {currentPath === "/me" ? (
             <button className={styles.header__button} onClick={logOut}>Выход</button>

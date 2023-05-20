@@ -45,6 +45,7 @@ const Register = ({ handleRegistration }) => {
               onChange={handleChange}
               value={values.name || ""}
             />
+            <span className="form__span">{errors.name}</span>
 
             <input
               type="email"
@@ -57,6 +58,7 @@ const Register = ({ handleRegistration }) => {
               onChange={handleChange}
               value={values.email || ""}
             />
+            <span className="form__span">{errors.email}</span>
 
             <input
               type="password"
@@ -68,6 +70,7 @@ const Register = ({ handleRegistration }) => {
               onChange={(e) => handleChange(e)}
               value={values.password || ""}
             />
+            <span className="form__span">{errors.password}</span>
 
             <input
               type="password"

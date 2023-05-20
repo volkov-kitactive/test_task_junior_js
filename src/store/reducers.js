@@ -4,8 +4,7 @@ export const filesReducer = (state = [], action) => {
       return action.payload;
     case "DELETE_ITEM":
       return state.filter((item) => item.id !== action.payload);
-    case "ADD_ITEMS":
-      case "ADD_ITEM":
+    case "ADD_ITEM":
       return [...state, action.payload];
     default:
       return state;

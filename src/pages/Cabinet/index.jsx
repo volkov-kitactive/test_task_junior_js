@@ -86,6 +86,8 @@ const Cabinet = ({ user, handle }) => {
      * ! Работает для каждого файла отдельно
      */
     .on("upload-success", (file, response) => {
+      console.log(response.uploadURL); // ! Сервер Возвращает undefined
+
       dispatch(incrementFileCount(1));
       dispatch(addItem(file.data));
     })

@@ -1,6 +1,5 @@
 import { Provider, useDispatch, useSelector } from "react-redux";
 
-import { useEffect, useState } from "react";
 import {
   Route,
   Routes,
@@ -23,23 +22,15 @@ import "./App.less";
 
 import * as api from "../../api";
 
-import { saveToken } from "../../store/actions";
+import { saveToken, setUser, setLoggedIn } from "../../store/actions";
+import { useEffect } from "react";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState({
-    email: "",
-  });
+  // const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  /** Меняет стейт входа  */
-  const handleLogin = (res) => {
-    setLoggedIn(true);
-    setUser(res);
-  };
 
   /** Обращение к api, Регистрация  */
   const handleRegistration = (obj) => {
@@ -62,7 +53,8 @@ function App() {
       .then(() => {
         localStorage.removeItem("token");
         navigate("login", { replace: true });
-        setLoggedIn(false);
+        // setLoggedIn(false);
+        dispatch(setLoggedIn(false))
       })
       .catch(() => alert("Что-то пошло не так"));
   };
@@ -78,12 +70,22 @@ function App() {
 
           // в локалку тоже сохраняю
           localStorage.setItem("token", res.data.token);
-          handleLogin(email); //так как токен пришёл значит, авторизация прошла успешно, можно поставить значение емейла из инпута
+          localStorage.setItem("login", true);
+          dispatch(setLoggedIn(true))
+          dispatch(setUser(email)) //так как токен пришёл значит, авторизация прошла успешно, можно поставить значение емейла из инпута
           navigate("/me");
         }
       })
       .catch(() => alert("Что-то пошло не так"));
   };
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("login");
+
+    if (loggedIn) {
+      dispatch(setLoggedIn(true));
+    }
+  }, []);
 
   return (
     <div className="page__container">
@@ -96,16 +98,17 @@ function App() {
           path="/register"
           element={<Register handleRegistration={handleRegistration} />}
         />
-        <Route
+        {/* <Route
           path="/me"
           element={
             <ProtectedRoute
               element={Cabinet}
-              loggedIn={loggedIn}
-              user={user}
-              setLoggedIn={setLoggedIn}
             />
           }
+        /> */}
+        <Route
+          path="/me"
+          element={<Cabinet />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-
+import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import Russian from "@uppy/locales/lib/ru_RU";
 
@@ -20,13 +20,17 @@ import { incrementFileCount, setFiles, addItem } from "../../store/actions";
 
 import "./Cabinet.less";
 
-const Cabinet = ({ user, handle }) => {
+const Cabinet = ({}) => {
   const dispatch = useDispatch();
   /* Токен глупо хранить в сторе редакса, но я использую его лишь для практики */
-  const token = useSelector((state) => state.token);
+  // const token = useSelector((state) => state.token);
   // количество файлов на данный момент
+  const navigate = useNavigate();
+
   const filesCount = useSelector((state) => state.fileCount);
   const files = useSelector((state) => state.files);
+  const user = useSelector((state) => state.user.email);
+  const loggedIn = useSelector((state) => state.loggedIn);
 
   /* конфиг uppy
    * Я использовал загрузчик uppy так как он симпатичный и мощный из под коробки
@@ -73,6 +77,7 @@ const Cabinet = ({ user, handle }) => {
    * ? XHR с коробоки делает всё что надо
    * ! XHR НЕ ВОЗВРАЩАЕТ ПРОМИСС!!
    */
+  const token = localStorage.getItem("token");
   uppy
     .use(XHR, {
       endpoint: "https://job.kitactive.ru/api/media/upload",
@@ -98,20 +103,26 @@ const Cabinet = ({ user, handle }) => {
 
   /** При монтировании грузим с сервера и сохраняем в стор */
   useEffect(() => {
-    api
-      .getFiles(token)
-      .then((res) => {
-        dispatch(setFiles(res.data.files));
-        dispatch(incrementFileCount(res.data.files.length));
-      })
-      .catch((err) => console.err(err));
+    if (!loggedIn) {
+      return navigate("/login");
+    } else {
+      const token = localStorage.getItem("token");
+
+      api
+        .getFiles(token)
+        .then((res) => {
+          dispatch(setFiles(res.data.files));
+          dispatch(incrementFileCount(res.data.files.length));
+        })
+        .catch((err) => console.err(err));
+    }
   }, []);
 
   return (
     <main className="main">
       <div className="main__container">
         <h2 className="main__title">Личный кабинет</h2>
-        <p className="main__subtitle">Здравствуйте {user?.email}!</p>
+        <p className="main__subtitle">Здравствуйте {user}!</p>
         <p className="main__subtitle">
           {filesCount > 0
             ? `Кол-во ваших файлов: ${filesCount}`

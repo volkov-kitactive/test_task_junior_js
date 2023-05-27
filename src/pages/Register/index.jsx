@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useFormAndValidation } from "../../hooks/useFormAndValidation";
 
+import Form from "../../components/Form";
+
 import "./Register.less";
 
 import { register } from "../../api";
@@ -42,8 +44,8 @@ const Register = () => {
     <main className="main">
       <div className="auth">
         <h2 className="auth__title">Регистрация</h2>
-        <form action="#" className="form" onSubmit={handleSubmit} noValidate>
-          <div className="form__group">
+        <Form buttonText='Зарегистрироваться' isButtonDisabled={!isValid} submit={handleSubmit}>
+          <>
             <input
               type="text"
               name="name"
@@ -90,17 +92,9 @@ const Register = () => {
               onChange={(e) => handleChange(e)}
               value={values.confirmPassword || ""}
             />
-          </div>
-          <span className="form__span">{errors.confirmPassword}</span>
-
-          <button
-            type="submit"
-            className={`form__button ${isValid ? "" : "form__button_disabled"}`}
-            disabled={!isValid}
-          >
-            Зарегистрироваться
-          </button>
-        </form>
+            <span className="form__span">{errors.confirmPassword}</span>
+          </>
+        </Form>
         <p className="auth__subtitle">
           Уже зарегистрированы?{" "}
           <Link className="link" to="/login">

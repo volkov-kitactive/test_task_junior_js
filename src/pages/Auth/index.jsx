@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Form from "../../components/Form";
 import { useFormAndValidation } from "../../hooks/useFormAndValidation";
 import { setUser, saveToken } from "../../store/actions";
 import { login } from "../../api";
@@ -44,44 +45,36 @@ const Auth = () => {
     <main className="main">
       <div className="auth">
         <h2 className="auth__title">Вход</h2>
-        <form className="form" noValidate action="#" onSubmit={handleSubmit}>
-          <div className="form__group">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              minLength="3"
-              required
-              className="form__input"
-              value={values.email || ""}
-              onChange={handleChange}
-            />
-            <span className="form__span">{errors.email}</span>
+        <Form
+          buttonText="Войти"
+          isButtonDisabled={!isValid}
+          submit={handleSubmit}
+        >
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            minLength="3"
+            required
+            className="form__input"
+            value={values.email || ""}
+            onChange={handleChange}
+          />
+          <span className="form__span">{errors.email}</span>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Пароль"
-              className="form__input"
-              required
-              minLength="5"
-              value={values.password || ""}
-              autoComplete="off"
-              onChange={handleChange}
-            />
-            <span className="form__span">{errors.password}</span>
-          </div>
-
-          <span className="form__span"></span>
-
-          <button
-            type="submit"
-            className={`form__button ${isValid ? "" : "form__button_disabled"}`}
-            disabled={!isValid}
-          >
-            Войти
-          </button>
-        </form>
+          <input
+            type="password"
+            name="password"
+            placeholder="Пароль"
+            className="form__input"
+            required
+            minLength="5"
+            value={values.password || ""}
+            autoComplete="off"
+            onChange={handleChange}
+          />
+          <span className="form__span">{errors.password}</span>
+        </Form>
         <p className="auth__subtitle">
           Не{" "}
           <Link className="link" to="/register">

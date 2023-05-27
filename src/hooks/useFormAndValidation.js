@@ -1,27 +1,28 @@
-import { useState, useCallback } from "react";
+/* eslint-disable import/prefer-default-export */
+import { useState, useCallback } from 'react';
 
 /*
   ? Кастомный хук для обработки и валидации управляемых компонентов
  */
 
-//кастомный хук валидации и отображения ошибок
+// кастомный хук валидации и отображения ошибок
 export function useFormAndValidation() {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
 
-  //перебирает инпуты и записывает значения, ошибок и валидна ли форма
+  // перебирает инпуты и записывает значения, ошибок и валидна ли форма
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: e.target.validationMessage });
-    setIsValid(e.target.closest("form").checkValidity());
+    setIsValid(e.target.closest('form').checkValidity());
 
     /* Удаляет ошибку если пользователь вводит другой пароль */
-    if (name === "password" && errors.confirmPassword) {
+    if (name === 'password' && errors.confirmPassword) {
       setErrors({
         ...errors,
-        confirmPassword: "",
+        confirmPassword: '',
       });
     }
   };
@@ -33,7 +34,7 @@ export function useFormAndValidation() {
       setErrors(newErrors);
       setIsValid(newIsValid);
     },
-    [setValues, setErrors, setIsValid]
+    [setValues, setErrors, setIsValid],
   );
 
   return {

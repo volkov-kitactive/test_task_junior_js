@@ -1,17 +1,43 @@
-import { Link } from "react-router-dom";
-import { useFormAndValidation } from "../../components/hooks/useFormAndValidation";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useFormAndValidation } from "../../hooks/useFormAndValidation";
+import { setUser, saveToken } from "../../store/actions";
+import { login } from "../../api";
 import "./Auth.less";
 
-const Auth = ({ login }) => {
+const Auth = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   // кастомный хук обработки формы и её валидации
   const { isValid, values, handleChange, errors } = useFormAndValidation();
 
+  /** Обращение к api, вход в систему  */
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // колбэком возвращаем значения обратно в App, так как логика входа у нас там
-    login({ email: values.email, password: values.password });
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/me");
+    } else {
+      login({ email: values.email, password: values.password })
+        .then((res) => {
+          if (res.data.token) {
+            // сохраняем в стор токен
+            dispatch(saveToken(res.data.token));
+
+            // в локалку тоже сохраняю
+            localStorage.setItem("token", res.data.token);
+            // ! добавляем email в локальное хранилище
+            // ! так как у сервера не ручки авторизации при обновлении странцы
+            // ! емейл пропадает. Есть и другие варианты решения этой проблемы
+            // ! но эта одна из самых простых, конечно в реальном проекте, такое дело наказуемо
+            localStorage.setItem("email", values.email);
+            dispatch(setUser({ email: values.email })); //так как токен пришёл значит, авторизация прошла успешно, можно поставить значение емейла из инпута
+            navigate("/me");
+          }
+        })
+        .catch(() => alert("Что-то пошло не так c входом"));
+    }
   };
 
   return (
@@ -44,7 +70,6 @@ const Auth = ({ login }) => {
               onChange={handleChange}
             />
             <span className="form__span">{errors.password}</span>
-
           </div>
 
           <span className="form__span"></span>

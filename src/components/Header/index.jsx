@@ -1,11 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styles from "./Header.module.less";
 import headerLogo from "../../img/header__logo.svg";
+import { logout } from "../../api";
 
 /** Компонет шапки сайта, на эндпоинтах выглядит по разному
  * ? Референс сайта kitActive))
  */
-const Header = ({ currentPath, logOut }) => {
+const Header = ({ currentPath }) => {
+  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  /** Обращение к api, выход из системы
+   * ? Мне кажется, логичным, что функцию выхода будет лучше реализовать в шапке
+   */
+  const handleLogOut = () => {
+    const jwt = localStorage.getItem("token");
+    logout(jwt)
+      .then(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
+        navigate("login", { replace: true });
+      })
+      .catch(() => alert("Что-то пошло не так с выходом"));
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
@@ -37,12 +57,20 @@ const Header = ({ currentPath, logOut }) => {
             <a href="tel:+79043042030">+7 904 304 20-30</a>
           </div>
           {currentPath === "/me" ? (
-            <button className={styles.header__button} onClick={logOut}>Выход</button>
+            <button className={styles.header__button} onClick={handleLogOut}>
+              Выход
+            </button>
           ) : (
             <>
-              <Link to="/login">
-                <button className={styles.header__button}>Вход</button>
-              </Link>
+              {token ? (
+                <Link to="/me">
+                  <button className={styles.header__button}>Вход</button>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <button className={styles.header__button}>Вход</button>
+                </Link>
+              )}
               <Link to="/register">
                 <button className={styles.header__button}>Регистрация</button>
               </Link>

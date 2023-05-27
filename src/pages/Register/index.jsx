@@ -1,12 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { useFormAndValidation } from "../../components/hooks/useFormAndValidation";
+import { useFormAndValidation } from "../../hooks/useFormAndValidation";
 
 import "./Register.less";
-// import { register } from "../../api";
 
-const Register = ({ handleRegistration }) => {
-  // const navigate = useNavigate();
+import { register } from "../../api";
+
+const Register = () => {
+  const navigate = useNavigate();
   const { values, errors, handleChange, isValid, setErrors } =
     useFormAndValidation();
 
@@ -21,11 +22,19 @@ const Register = ({ handleRegistration }) => {
       });
       return;
     } else {
-      handleRegistration({
+      /** Обращение к api, Регистрация  */
+      register({
         email: values.email,
         password: values.password,
         name: values.name,
-      });
+      })
+        .then((res) => {
+          // если всё норм переходим на страницу входа
+          if (res.data.status === "ok") {
+            navigate("/login");
+          }
+        })
+        .catch(() => alert("Регистрация провалилась"));
     }
   };
 
@@ -50,7 +59,6 @@ const Register = ({ handleRegistration }) => {
             <input
               type="email"
               name="email"
-              // pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
               placeholder="Email"
               minLength="3"
               required
@@ -64,7 +72,7 @@ const Register = ({ handleRegistration }) => {
               type="password"
               name="password"
               placeholder="Пароль"
-              minLength="4"
+              minLength="5"
               required
               className="form__input"
               onChange={(e) => handleChange(e)}
@@ -76,7 +84,7 @@ const Register = ({ handleRegistration }) => {
               type="password"
               name="confirmPassword"
               placeholder="Повторите пароль"
-              minLength="4"
+              minLength="5"
               required
               className="form__input"
               onChange={(e) => handleChange(e)}

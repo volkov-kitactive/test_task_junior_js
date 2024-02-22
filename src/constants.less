@@ -1,0 +1,17 @@
+//  переменные
+@maincolor: #1b70ca;
+@mainBlack: #333;
+
+//примеси кнопок
+.buttons(@_width: 156px) {
+  border-radius: 5px;
+  width: @_width;
+  height: 38px;
+  font-size: 20px;
+  font-weight: lighter;
+
+  &_disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+};
